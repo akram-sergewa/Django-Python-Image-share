@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+        <p>Name: {{ userModule.name }}</p>
+        <p>Birthday: {{ userModule.birthday }}</p>
+        
+        
+    <form action={% url "applyFX" %} method='POST'>
+        {% csrf_token %}
+         <!-- List of uploaded documents -->
+        {% if documents %}
+            <ul>
+                {% for document in documents %}
+                    <li><a href="{{ document.docfile.url }}">{{ document.docfile.name }}</a></li>
+                    <a href={% url "deleteImage" %}?img_id={{ document.pk }}>Delete</a>
+                    <input type='checkbox' name='chosenImages' value={{ document.docfile.name }}>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No documents.</p>
+        {% endif %}
+   
+        <input type='submit' value='Apply Effects'>
+    </form>
+
+
+{% endblock %}

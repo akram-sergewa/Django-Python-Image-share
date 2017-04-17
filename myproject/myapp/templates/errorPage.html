@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+{% if error %}
+{{ error }}
+{% endif %}
+<p><a href="/myapp/profile/">Go back to profile</a></p>
+
+<p>Forgot your password? <a href="/myapp/resetpassword/">Reset it!</a></p>
+{% endblock %}

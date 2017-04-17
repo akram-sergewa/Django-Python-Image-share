@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+{% block content %}
+
+        
+        
+        {% csrf_token %}
+         <!-- List of uploaded documents -->
+        
+            <div class="container">
+
+                <div class="row">
+                <div class="col-lg-12">
+                        <h1 class="page-header">Your Gallery</h1>
+                        <ul class="pager">
+                        <li><a href="?p={{ ppage }}">Previous</a></li>
+                        <li><a href="?p={{ npage}}">Next</a></li>
+                      </ul>
+                    </div>
+                    {% if documents %}
+                {% for document in documents %}
+
+                    <div class="col-lg-3 col-md-4 col-xs-6 thumb" style="height:400px;">
+                      
+                        <a class="thumbnail" href="/myapp/editImage/?img_id={{ document.pk }}">
+                            <img class="img-responsive" src="{{ document.docfile.url }}"{{ document.docfile.name }} alt="">
+                        </a>
+                        
+                         <button type="button" class="btn btn-danger" onclick="location.href='{% url "deleteImage" %}?img_id={{ document.pk }}';">Delete</button>
+                        {% if document.shared %}
+                        <a href="#" class="btn btn-primary btn-warning disabled" role="button">Shared</a>
+                        {% else %}
+                        <a href="#" class="btn btn-primary btn-info disabled" role="button">Not shared</a>
+                        {% endif %}
+                        <button type="button" class="btn btn-success" onclick="location.href='{% url "editImage" %}?img_id={{ document.pk }}';">Edit</button>
+
+                        <h4>description</h4>
+                        {{ document.description }} 
+                        <br/><br/>   <br/><br/>   <br/><br/>                         
+                    </div>
+                       
+                       
+                {% endfor %}
+           
+            
+            </div>
+       
+        <ul class="pager">
+                        <li><a href="?p={{ ppage }}">Previous</a></li>
+                        <li><a href="?p={{ npage}}">Next</a></li>
+                      </ul>
+        {% else %}
+        <div class="container">
+            <p>No documents.</p>
+            <p>
+            To upload new images to the cloud, click here
+            </p>
+            <button type="button" class="btn btn-success" onclick="location.href='/myapp/main/';">Upload</button>
+            </div>
+        {% endif %}
+   
+        
+        
+  </div>  
+<script>
+$(function () {
+    $('.button-checkbox').each(function () {
+
+        // Settings
+        var $widget = $(this),
+            $button = $widget.find('button'),
+            $checkbox = $widget.find('input:checkbox'),
+            color = $button.data('color'),
+            settings = {
+                on: {
+                    icon: 'glyphicon glyphicon-check'
+                },
+                off: {
+                    icon: 'glyphicon glyphicon-unchecked'
+                }
+            };
+
+        // Event Handlers
+        $button.on('click', function () {
+            $checkbox.prop('checked', !$checkbox.is(':checked'));
+            $checkbox.triggerHandler('change');
+            updateDisplay();
+        });
+        $checkbox.on('change', function () {
+            updateDisplay();
+        });
+
+        // Actions
+        function updateDisplay() {
+            var isChecked = $checkbox.is(':checked');
+
+            // Set the button's state
+            $button.data('state', (isChecked) ? "on" : "off");
+
+            // Set the button's icon
+            $button.find('.state-icon')
+                .removeClass()
+                .addClass('state-icon ' + settings[$button.data('state')].icon);
+
+            // Update the button's color
+            if (isChecked) {
+                $button
+                    .removeClass('btn-default')
+                    .addClass('btn-' + color + ' active');
+            }
+            else {
+                $button
+                    .removeClass('btn-' + color + ' active')
+                    .addClass('btn-default');
+            }
+        }
+
+        // Initialization
+        function init() {
+
+            updateDisplay();
+
+            // Inject the icon if applicable
+            if ($button.find('.state-icon').length == 0) {
+                $button.prepend('<i class="state-icon ' + settings[$button.data('state')].icon + '"></i> ');
+            }
+        }
+        init();
+    });
+});
+</script>
+{% endblock %}
+
+  

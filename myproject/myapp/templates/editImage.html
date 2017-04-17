@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block content %}
+
+     <div class="container">
+     <div class="row">
+    	<div class="col-xs-12">
+        	
+        <img class="img-responsive" src="{{ document.docfile.url }}"{{ document.docfile.name }} alt="{{ document.description }}">
+    </br>
+    
+    
+     <div class="jumbotron">
+              <form action="{% url "editImage" %}" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                  <h4>
+                   {{ form.imageId }}
+                   </br>
+
+                    {{ form.description.label_tag }}
+                    {{ form.description }}
+                    </br>
+                  
+                    {{ form.shared.label_tag }}
+                    {{ form.shared }}
+                  </h4>
+                  <p><input type="submit" class="btn btn-success"/> Apply changes</p>
+                  <button type="button" class="btn btn-warning" onclick="location.href='{% url "chooseFX" %}?img_id={{ document.pk }}';">Apply Special Effects</button>
+
+              </form>
+      </div>
+
+      </div>
+      </div>
+      
+      <script>
+        document.getElementById('{{ form.imageId.auto_id }}').value="{{ document.pk }}"
+        document.getElementById('{{ form.imageId.auto_id }}').style.visibility= "hidden";
+        document.getElementById('{{ form.description.auto_id }}').value="{{ document.description }}"
+        </script>
+        
+        {% if document.shared %}
+        <script>document.getElementById('{{ form.shared.auto_id }}').setAttribute("checked", "checked");</script>
+        {% else %}
+        <script>document.getElementById('{{ form.shared.auto_id }}').removeAttribute("checked");</script>
+        {% endif %}
+        
+        
+      
+       </div>
+     
+{% endblock %}
+
+  

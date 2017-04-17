@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block content %}
+
+    
+<div class="container">
+  <div class="jumbotron">
+    <h1>ImageFX Cloud</h1>
+    <p>Upload your images, apply effects, download them anytime</p> 
+    {% if not user.is_authenticated %}
+    <button type="button" class="btn btn-warning" onclick="location.href='/myapp/browseAll/';">Browse shared images</button>
+    {% endif %}
+  </div>
+  
+  </div> <!-- /container -->
+{% if user.is_authenticated %}
+	<div class="container"> <!-- /upload -->
+	
+	<!-- Upload form. Note enctype attribute! -->
+        <form action="{% url "browse" %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <p>{{ form.non_field_errors }}</p>
+
+            <p>{{ form.docfile.label_tag }} {{ form.docfile.help_text }}</p>
+
+            <p>
+                {{ form.docfile.errors }}
+                {{ form.docfile }}
+            </p>
+            <p>
+                {{ form.description.label_tag }}
+                {{ form.description }}
+            </p>
+            <p>
+                {{ form.shared.label_tag }}
+                {{ form.shared }}
+            </p>
+
+            <p><input type="submit" value="Upload" class="btn btn-success"/></p>
+        </form>
+
+	<!-- MINIMUM IMAGE DIMENSIONS 
+    
+<input id="input-dim-1" name="inputdim1[]" type="file" single class="file-loading" accept="image/*">
+-->
+
+<script>
+// with plugin options
+
+$("#{{ form.docfile.auto_id }}").fileinput({
+    
+    previewFileType:'any',
+    //uploadUrl: "{% url "browse" %}",
+    showUpload:false,
+    allowedFileExtensions: ["jpg", "png", "gif"],
+    minImageWidth: 50,
+    minImageHeight: 50
+});
+</script>
+
+</div> <!-- /container -->
+{% else %}
+<div class="container">
+<p>
+You need to have an account to use IMAGEFX CLOUD
+</p>
+
+<button type="button" class="btn btn-success" onclick="location.href='/myapp/login/';">login</button>
+<button type="button" class="btn btn-danger"  onclick="location.href='/myapp/register/';">register</button>
+
+
+</div>
+
+{% endif %}
+<div class="container">
+
+  <div class="row">
+    <div class="col-sm-4">
+      <h3>About</h3>
+      <p>This cloud application is designed by Akram Sergewa for the cloud computing unit at university of Bristol</p>
+    </div>
+    <div class="col-sm-4">
+      <h3>How to use</h3>
+      <p>You just need to log in and have your cloud space, use the links in the menu to access your profile and to browser your images</p>
+    </div>
+    <div class="col-sm-4">
+      <h3>What can I do?</h3>        
+      <p>You can upload and save your images on the cloud and download them anytime from any place</p>
+      <p>You can also apply visual effects and produce videos</p>
+    </div>
+ </div>
+</div>
+
+
+{% endblock %}
